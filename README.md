@@ -653,6 +653,107 @@ curl -X POST -H "Content-Type: application/json" \
   "YOUR_WEBHOOK_URL"
 ```
 
+#### OpenClaw 启动失败：uv_interface_addresses error
+
+**问题现象**：
+```
+SystemError [ERR_SYSTEM_ERROR]: A system error occurred: 
+uv_interface_addresses returned Unknown system error 13
+```
+
+**问题原因**：Android Bionic 内核限制，Node.js 无法获取网络接口信息
+
+**解决方案**：使用 Bionic Bypass 补丁
+
+**步骤 1：创建补丁文件**
+
+```bash
+# 创建目录
+mkdir -p ~/.openclaw
+
+# 创建补丁文件
+cat > ~/.openclaw/bionic-bypass.js << 'EOF'
+const os = require('os');
+
+const originalNetworkInterfaces = os.networkInterfaces;
+
+os.networkInterfaces = function() {
+  try {
+    const result = originalNetworkInterfaces.call(os);
+    if (result && Object.keys(result).length > 0) {
+      return result;
+    }
+  } catch (e) {
+    console.warn('[Bionic Bypass] Intercepted error:', e.message);
+  }
+  
+  return {
+    lo: [{
+      address: '127.0.0.1',
+      netmask: '255.0.0.0',
+      family: 'IPv4',
+      mac: '00:00:00:00:00:00',
+      internal: true,
+      cidr: '127.0.0.1/8'
+    }]
+  };
+};
+
+const originalHostname = os.hostname;
+os.hostname = function() {
+  try {
+    return originalHostname.call(os);
+  } catch (e) {
+    return 'localhost';
+  }
+};
+
+console.log('[Bionic Bypass] Patched');
+EOF
+```
+
+**步骤 2：设置环境变量**
+
+```bash
+# 添加到 .bashrc
+echo 'export NODE_OPTIONS="--require /root/.openclaw/bionic-bypass.js"' >> ~/.bashrc
+
+# 立即生效
+source ~/.bashrc
+
+# 验证
+echo $NODE_OPTIONS
+```
+
+**步骤 3：测试补丁**
+
+```bash
+node -e "console.log(require('os').networkInterfaces())"
+```
+
+预期输出：
+```
+[Bionic Bypass] Patched
+[Bionic Bypass] Intercepted error: ...
+{ lo: [ { address: '127.0.0.1', ... } ] }
+```
+
+**步骤 4：启动 OpenClaw**
+
+```bash
+# 前台运行（推荐用于测试）
+openclaw gateway run
+
+# 或者后台运行
+nohup openclaw gateway run > /dev/null 2>&1 &
+```
+
+**成功标志**：
+```
+13:16:58 [gateway] listening on ws://127.0.0.1:18789
+13:17:01 [feishu] feishu[default]: WebSocket client started
+```
+
 ---
 
 ## 常见问题
