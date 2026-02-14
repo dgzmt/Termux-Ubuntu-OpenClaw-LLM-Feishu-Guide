@@ -1,0 +1,139 @@
+root@localhost:~# # 查看 gateway 命令帮助
+openclaw gateway --help
+
+# 或者查看所有子命令
+openclaw --help
+[Bionic Bypass] Patched
+[Bionic Bypass] Patched
+Config warnings:\n- plugins.entries.feishu: plugin feishu: duplicate plugin id detected; later plugin may be overridden (/usr/lib/node_modules/openclaw/extensions/feishu/index.ts)
+[Bionic Bypass] Intercepted error: A system error occurred: uv_interface_addresses returned Unknown system error 13 (Unknown system error 13)
+Config warnings:\n- plugins.entries.feishu: plugin feishu: duplicate plugin id detected; later plugin may be overridden (/usr/lib/node_modules/openclaw/extensions/feishu/index.ts)
+13:01:53 [plugins] feishu_doc: Registered feishu_doc, feishu_app_scopes
+13:01:53 [plugins] feishu_wiki: Registered feishu_wiki tool
+13:01:53 [plugins] feishu_drive: Registered feishu_drive tool
+13:01:53 [plugins] feishu_bitable: Registered 6 bitable tools
+
+🦞 OpenClaw 2026.2.9 (33c75cb)
+   WhatsApp automation without the "please accept our new privacy policy".
+
+Usage: openclaw gateway [options] [command]
+
+Run the WebSocket Gateway
+
+Options:
+  --allow-unconfigured       Allow gateway start without gateway.mode=local in config (default: false)
+  --auth <mode>              Gateway auth mode ("token"|"password")
+  --bind <mode>              Bind mode ("loopback"|"lan"|"tailnet"|"auto"|"custom"). Defaults to config gateway.bind (or loopback).
+  --claude-cli-logs          Only show claude-cli logs in the console (includes stdout/stderr) (default: false)
+  --compact                  Alias for "--ws-log compact" (default: false)
+  --dev                      Create a dev config + workspace if missing (no BOOTSTRAP.md) (default: false)
+  --force                    Kill any existing listener on the target port before starting (default: false)
+  -h, --help                 display help for command
+  --password <password>      Password for auth mode=password
+  --port <port>              Port for the gateway WebSocket
+  --raw-stream               Log raw model stream events to jsonl (default: false)
+  --raw-stream-path <path>   Raw stream jsonl path
+  --reset                    Reset dev config + credentials + sessions + workspace (requires --dev) (default: false)
+  --tailscale <mode>         Tailscale exposure mode ("off"|"serve"|"funnel")
+  --tailscale-reset-on-exit  Reset Tailscale serve/funnel configuration on shutdown (default: false)
+  --token <token>            Shared token required in connect.params.auth.token (default: OPENCLAW_GATEWAY_TOKEN env if set)
+  --verbose                  Verbose logging to stdout/stderr (default: false)
+  --ws-log <style>           WebSocket log style ("auto"|"full"|"compact") (default: "auto")
+
+Commands:
+  call                       Call a Gateway method
+  discover                   Discover gateways via Bonjour (local + wide-area if configured)
+  health                     Fetch Gateway health
+  install                    Install the Gateway service (launchd/systemd/schtasks)
+  probe                      Show gateway reachability + discovery + health + status summary (local + remote)
+  restart                    Restart the Gateway service (launchd/systemd/schtasks)
+  run                        Run the WebSocket Gateway (foreground)
+  start                      Start the Gateway service (launchd/systemd/schtasks)
+  status                     Show gateway service status + probe the Gateway
+  stop                       Stop the Gateway service (launchd/systemd/schtasks)
+  uninstall                  Uninstall the Gateway service (launchd/systemd/schtasks)
+  usage-cost                 Fetch usage cost summary from session logs
+
+Docs: docs.openclaw.ai/cli/gateway
+
+[Bionic Bypass] Patched
+[Bionic Bypass] Patched
+Config warnings:\n- plugins.entries.feishu: plugin feishu: duplicate plugin id detected; later plugin may be overridden (/usr/lib/node_modules/openclaw/extensions/feishu/index.ts)
+
+🦞 OpenClaw 2026.2.9 (33c75cb)
+   WhatsApp automation without the "please accept our new privacy policy".
+
+Usage: openclaw [options] [command]
+
+Options:
+  --dev             Dev profile: isolate state under ~/.openclaw-dev, default gateway port 19001, and shift derived ports (browser/canvas)
+  -h, --help        display help for command
+  --no-color        Disable ANSI colors
+  --profile <name>  Use a named profile (isolates OPENCLAW_STATE_DIR/OPENCLAW_CONFIG_PATH under ~/.openclaw-<name>)
+  -V, --version     output the version number
+
+Commands:
+  acp               Agent Control Protocol tools
+  agent             Run an agent turn via the Gateway (use --local for embedded)
+  agents            Manage isolated agents (workspaces + auth + routing)
+  approvals         Exec approvals
+  browser           Manage OpenClaw's dedicated browser (Chrome/Chromium)
+  channels          Channel management
+  completion        Generate shell completion script
+  config            Config helpers (get/set/unset). Run without subcommand for the wizard.
+  configure         Interactive prompt to set up credentials, devices, and agent defaults
+  cron              Cron scheduler
+  daemon            Gateway service (legacy alias)
+  dashboard         Open the Control UI with your current token
+  devices           Device pairing + token management
+  directory         Directory commands
+  dns               DNS helpers
+  docs              Docs helpers
+  doctor            Health checks + quick fixes for the gateway and channels
+  gateway           Gateway control
+  health            Fetch health from the running gateway
+  help              display help for command
+  hooks             Hooks tooling
+  logs              Gateway logs
+  memory            Memory search tools
+  message           Send messages and channel actions
+  models            Model configuration
+  node              Node control
+  nodes             Node commands
+  onboard           Interactive wizard to set up the gateway, workspace, and skills
+  pairing           Pairing helpers
+  plugins           Plugin management
+  reset             Reset local config/state (keeps the CLI installed)
+  sandbox           Sandbox tools
+  security          Security helpers
+  sessions          List stored conversation sessions
+  setup             Initialize ~/.openclaw/openclaw.json and the agent workspace
+  skills            Skills management
+  status            Show channel health and recent session recipients
+  system            System events, heartbeat, and presence
+  tui               Terminal UI
+  uninstall         Uninstall the gateway service + local data (CLI remains)
+  update            CLI update helpers
+  webhooks          Webhook helpers
+
+Examples:
+  openclaw channels login --verbose
+    Link personal WhatsApp Web and show QR + connection logs.
+  openclaw message send --target +15555550123 --message "Hi" --json
+    Send via your web session and print JSON result.
+  openclaw gateway --port 18789
+    Run the WebSocket Gateway locally.
+  openclaw --dev gateway
+    Run a dev Gateway (isolated state/config) on ws://127.0.0.1:19001.
+  openclaw gateway --force
+    Kill anything bound to the default gateway port, then start it.
+  openclaw gateway ...
+    Gateway control via WebSocket.
+  openclaw agent --to +15555550123 --message "Run summary" --deliver
+    Talk directly to the agent using the Gateway; optionally send the WhatsApp reply.
+  openclaw message send --channel telegram --target @mychat --message "Hi"
+    Send via your Telegram bot.
+
+Docs: docs.openclaw.ai/cli
+
+root@localhost:~#
